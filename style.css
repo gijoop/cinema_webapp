@@ -1,0 +1,423 @@
+*{
+    box-sizing: border-box;
+    font-family: "Roboto";
+    color: white;
+}
+:root {
+    --background-color: #0c0c0c;
+}
+body{
+    margin: 0;
+    min-height: 100vh;
+    background-image: url("images/background_dark.png");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    padding-bottom: 20vh;
+}
+a{
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+table{
+    border-collapse: collapse;
+}
+
+/* MAIN SITE */
+    /* TOP BAR */
+    .top-panel{
+        display: flex;
+        justify-content: center;
+        min-height: 100px;
+        margin-top: 20px;
+        margin-bottom: 70px;
+    }
+    .top-box{
+        width: 30%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-button{
+        margin-right: 10px;
+        line-height: 0px;
+        padding: 22px 15px;
+        font-size: 18px;
+        border-radius: 5px;
+        border: 2px solid red;
+        color: white;
+        transition-duration: 0.4s;
+    }
+    .form-button:hover{
+        text-shadow: 0 0 20px rgb(255, 255, 255);
+        transition-duration: 0.4s;
+    }
+    .greeting{
+        color: white;
+        font-weight: normal;
+        font-size: 25px;
+        margin-right: 25px;
+    }
+
+    /* PAGE CONTENT */
+    .main{
+        display: flex;
+        width: 70%;
+        margin: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+    .header{
+        text-align: left;
+        width: 100%;
+        color: white;
+        font-size: 32px;
+    }
+    .hr-break{
+        width: 30%;
+        border: 0;
+        border-top: 3px solid red;
+    }
+    .comingsoon{
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        margin-bottom: 100px;
+    }
+    .comingmovie{
+        width: 32%;
+        color: white;
+        font-size: 18px;
+        text-align: center;
+    }
+    .moviephoto{
+        width: 100%;
+        height:33vw;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 10px;
+        border-radius: 5px;
+    }
+    .release-date{
+        font-size: 24px;
+        color: #d2d2d2;
+    }
+    /* SHOWINGS */
+    .date-picker{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+    }
+    .date-button{
+        padding: 15px 15px;
+        margin: 0 20px;
+        background-color: red;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 24px;
+    }
+    .date-button-unactive{
+        background-color: #680000 !important; 
+        color: #aaaaaa;
+    }
+    .showing{
+        background-color: #0c0c0caa;
+        width: 100%;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    .showing-img{
+        height: 18vw;
+        width: 17%;
+        background-color: red;
+        border-radius: 5px;
+        margin: 10px;
+        background-size: cover;
+        background-position: center;
+    }
+    .showing-properties{
+        width:65%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .showing-title{
+        font-size: 30px;
+        font-weight: bold;
+        margin-top: 10px;
+        height: 15%;
+        width:100%;
+    }
+    .showing-details{
+        font-size: 18px;
+        width: 60%;
+        margin-bottom: 10px;
+        width:100%;
+    }
+    .showing-description{
+        max-width: 75%;
+        height: fit-content;
+        margin-right: 10%;
+    }
+    .showing-time{
+        font-size: 55px;
+        margin: 10px 20px 0 0;
+    }
+    .showing-button{
+        line-height: 0px;
+        padding: 22px 15px;
+        margin: 0 20px 10px 0;
+        font-size: 18px;
+        border-radius: 5px;
+        border: 2px solid red;
+        color: white;
+        transition-duration: 0.4s;
+        text-align: center;
+    }
+    .showing-button:hover{
+        text-shadow: 0 0 20px rgb(255, 255, 255);
+        transition-duration: 0.4s;
+    }
+    .showing-column{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+/* LOGGING */
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.logo-box{
+    height: 17vh;
+    width: 40%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+.logging-panel{
+    background-color: #00000072;
+    text-align: center;
+    width: 35%;
+    min-height: 40vh;
+    border-radius: 50px;
+    padding: 50px 5% 10px 5%;
+}
+.ltitle{
+    text-align: left;
+    font-size: 40px;
+    color: white;
+    font-weight: normal;
+    margin: 10px 0;
+}
+.login-input{
+    line-height: 50px;
+    font-size: 24px;
+    width: 100%;
+    background-color: #2f2f2f;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 0 20px;
+}
+.login-submit{
+    background-color: red;
+    width: 100%;
+    color: white;
+    font-size: 24px;
+    line-height: 50px;
+    border-radius: 10px;
+}
+.login-submit:hover{
+    cursor: pointer;
+    background-color: rgb(166, 0, 0);
+}
+.register-link{
+    display: inline;
+    color: red;
+}
+.error{
+    font-size: 14px;
+    color: rgb(196, 32, 32);
+    font-weight: normal;
+}
+
+/* USER/ADMIN PANEL */
+
+.panel{
+    width: 90%;
+    background-color: #00000072;
+    border-radius: 40px;
+    margin: 0 auto;
+    min-height: 600px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    font-size: 32px;
+}
+.panel-menu{
+    min-height: 1000px;
+    width: 15%;
+    background-color: rgb(0, 0, 0);
+    border-radius: 40px 0 0 40px;
+    padding: 40px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.panel-menu-button{
+    font-size: 16px;
+    border: 2px solid red;
+    border-radius: 10px;
+    width: 80%;
+    margin-bottom: 15px;
+    line-height: 50px;
+}
+.panel-tab{
+    width: 85%;
+    min-height: 400px;
+    font-size: 18px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.panel-tab-header{
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-size: 40px;
+}
+.panel-table{
+    text-align: left;
+    font-size: 24px;
+}
+.panel-movies{
+    text-align: left;
+    font-size: 16px;
+    width: 100%;
+    background-color: #1f1f1f;
+    border: rgb(163, 163, 163);
+}
+.panel-movies td, th{
+    padding: 10px;
+}
+.panel-movies th{
+    text-align: center;
+}
+.panel-input{
+    line-height: 24px;
+    font-size: 18px;
+    background-color: #1d1d1d;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding: 0 5px;
+    resize: none;
+}
+.panel-input-submit{
+    background-color: red;
+    color: white;
+    font-size: 20px;
+    line-height: 35px;
+    border-radius: 10px;
+    padding: 0 20px;
+    border: 0;
+}
+.panel-input-submit:hover{
+    cursor: pointer;
+    background-color: rgb(166, 0, 0);
+}
+.table-label{
+    padding-right: 20px;
+    text-align: left;
+    color: rgb(200, 200, 200);
+}
+.panel-menu-button:hover{
+    text-shadow: 0 0 20px rgb(255, 255, 255);
+    transition-duration: 0.4s;
+}
+
+/* BOOKING */
+.seat-section{
+    width:50%;
+    padding-top: 50px;
+    padding: 50px 5%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+.screen{
+    width: 70%;
+    line-height: 20px;
+    background-color: #202020;
+    border-radius: 5px;
+    font-size: 15px;
+    margin-bottom: 80px;
+    margin-top: 20px;
+}
+.seat-row{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+}
+.seat{
+    width: 40px;
+    line-height: 36px;
+    font-size: 15px;
+    margin: 5px;
+    background-color: red;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 2px solid #00000000;
+}
+.seat-unactive{
+    background-color: #680000 !important; 
+    color: #aaaaaa;
+    cursor: default;
+}
+.booking-title{
+    font-size: 46px;
+    font-weight: bold;
+}
+.booking-details{
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+.booking-button{
+    line-height: 0px;
+    padding: 25px 40px;
+    font-size: 28px;
+    border-radius: 5px;
+    border: 3px solid red;
+    transition-duration: 0.4s;
+    text-align: center;
+    margin-top: auto;
+    cursor: pointer;
+}
+.booking-button:hover{
+    text-shadow: 0 0 20px rgb(255, 255, 255);
+    transition-duration: 0.4s;
+}
