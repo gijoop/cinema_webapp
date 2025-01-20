@@ -45,7 +45,7 @@
         require "connect.php";
         session_start();
         if(!isset($_SESSION['user'])){
-            header("Location: logowanie.php");
+            header("Location: login.php");
         }
         catchError();
         $showing_id = $_GET['id'];
@@ -62,7 +62,7 @@
                     $sql = "INSERT INTO ticket (showing_id, user_id, seat_number) VALUES ($showing_id, $user_id, $seat)";
                     if($conn->query($sql)){
                         echo '<script> alert("Pomyślnie zarezerwowano siedzenie/a!"); </script>';
-                        header("Location: panel_uzytkownika.php");
+                        header("Location: user_panel.php");
                     }else{
                         setError("Wystąpił problem z tranzakcją! Spróbuj ponownie później");
                         header("Location: zarezerwuj.php");
@@ -80,7 +80,7 @@
             <img src="images/logo.png" width="50%">
         </div>
         <div class="top-box" style="justify-content: right; width:40%;">
-            <a href="wyloguj.php" class="form-button">
+            <a href="logout.php" class="form-button">
                 Wyloguj
             </a>
             <a href="index.php" class="form-button">

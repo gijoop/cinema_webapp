@@ -25,7 +25,7 @@
             <img src="../images/logo.png" width="50%">
         </div>
         <div class="top-box" style="justify-content: right; width:40%;">
-            <a href="../wyloguj.php" class="form-button">
+            <a href="../logout.php" class="form-button">
                 Wyloguj
             </a>
             <a href="../index.php" class="form-button">
@@ -81,7 +81,7 @@
                 <td><?php echo formatDate($employee->getHireDate(), "d.m.Y") ?> <br></td>
             </tr>
             </table><br><br>
-            <a href="/omega/zmien_haslo.php" class="showing-button">Zmień hasło</a>
+            <a href="/omega/change_passwd.php" class="showing-button">Zmień hasło</a>
         </div>
     </div>
 </body>

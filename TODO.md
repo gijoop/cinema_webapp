@@ -1,0 +1,5 @@
+- zrobić dokumentację (najlepiej równolegle z projektem)
+- zastąpić zapytania na procedury/funkcje w bazie danych
+- dodać jakieś triggery
+- przenieść walidację hasła do jednej funkcji
+- ugenerycznić zmianę hasła dla użytkownika i pracownika

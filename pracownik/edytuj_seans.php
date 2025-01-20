@@ -28,7 +28,7 @@
             <img src="../images/logo.png" width="50%">
         </div>
         <div class="top-box" style="justify-content: right; width:40%;">
-            <a href="../wyloguj.php" class="form-button">
+            <a href="../logout.php" class="form-button">
                 Wyloguj
             </a>
             <a href="../index.php" class="form-button">
