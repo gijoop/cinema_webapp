@@ -75,12 +75,12 @@ function renderShowing($showing, string $currentDate): string {
         <div class='showing-img' style='background-image: url({$movie->posterLink()})'></div>
         <div class='showing-properties'>
             <span class='showing-title'>{$movie->getTitle()}</span>
-            <span class='showing-details'>{$movie->getLength('h')} &nbsp {$movie->getCategory()} &nbsp {$movie->getReleaseYear()} &nbsp {$showing->getLanguage()}</span>
+            <span class='showing-details'>{$movie->getLength('h')} &nbsp {$movie->getCategory()} &nbsp {$movie->getDate()} &nbsp {$showing->getLanguage()}</span>
             <p class='showing-description'>{$movie->getDescription()}</p>
         </div>
         <div class='showing-column'>
             <span class='showing-time'>$time</span>
-            <a href='zarezerwuj.php?id=$id' class='showing-button'>Zarezerwuj</a>
+            <a href='book_seats.php?id=$id' class='showing-button'>Zarezerwuj</a>
         </div>
     </div>";
 }

@@ -40,14 +40,20 @@ function renderUserInfo($user) {
 
 function renderUserTickets($userId) {
     $tickets = DBHelper::executeQuery(
-        "SELECT ticket.*, showing.date, showing.time, showing.hall_id, showing.language_id, movie.title 
-            FROM ticket 
-            JOIN showing ON showing.id = ticket.showing_id 
-            JOIN movie ON movie.id = showing.movie_id 
-            WHERE ticket.user_id = ? 
-            ORDER BY showing.date DESC, showing.time DESC", 
+        "SELECT showing.date showing_date, 
+        showing.time showing_time, 
+        showing.hall_id hall_id, 
+        language.name language,
+        movie.title title,
+        ticket.seat_number seat_number
+        FROM ticket 
+        JOIN showing ON showing.id = ticket.showing_id 
+        JOIN movie ON movie.id = showing.movie_id 
+        JOIN language ON language.id = showing.language_id
+        WHERE ticket.user_id = ? 
+        ORDER BY showing.date DESC, showing.time DESC", 
         [$userId]
-    )->fetch_assoc();
+    )->fetch_all(MYSQLI_ASSOC);
 
     if (empty($tickets)) {
         return "<p>Brak biletów</p>";
@@ -66,11 +72,11 @@ function renderUserTickets($userId) {
     foreach ($tickets as $ticket) {
         $output .= "<tr>
             <td>{$ticket['title']}</td>
-            <td>{$ticket['date']}</td>
-            <td>{$ticket['time']}</td>
+            <td>{$ticket['showing_date']}</td>
+            <td>{$ticket['showing_time']}</td>
             <td>{$ticket['hall_id']}</td>
             <td>{$ticket['seat_number']}</td>
-            <td>{$ticket['language_id']}</td>
+            <td>{$ticket['language']}</td>
         </tr>";
     }
 
@@ -113,7 +119,6 @@ function renderUserTickets($userId) {
             </div>
             <?php echo renderUserTickets($user->getID()); ?>
             <br>
-            <a href="user_panel.php?usun=true" class="form-button" style="align-self: flex-end">Usuń stare bilety</a>
         </div>
     </div>
 </body>
