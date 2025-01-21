@@ -94,8 +94,6 @@ class Movie
 
     public function delete()
     {
-        $dbHelper = new DBHelper();
-
         // Delete the poster file
         $posterPath = $_SERVER['DOCUMENT_ROOT'] . "/omega/posters/" . $this->poster_name;
         if (!unlink($posterPath)) {
@@ -103,7 +101,11 @@ class Movie
         }
 
         // Delete the movie record
-        $dbHelper->executeQuery("DELETE FROM movie WHERE id = ?", [$this->id]);
+        try{
+            DBHelper::executeQuery("DELETE FROM movie WHERE id = ?", [$this->id]);
+        } catch (Exception $e) {
+            throw new Exception("Failed to delete movie: " . $e->getMessage());
+        }
     }
 
     public function getID()
@@ -126,9 +128,19 @@ class Movie
         return $this->category_name;
     }
 
+    public function getCategoryID()
+    {
+        return $this->category_id;
+    }
+
     public function getDate()
     {
         return $this->release_date;
+    }
+
+    public function getPosterName()
+    {
+        return $this->poster_name;
     }
 
     public function getLength($unit = null)
@@ -143,7 +155,7 @@ class Movie
         return $this->length;
     }
 
-    public function posterLink()
+    public function getPosterLink()
     {
         return "/omega/posters/" . $this->poster_name;
     }

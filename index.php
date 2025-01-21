@@ -30,7 +30,7 @@ function getUserGreeting(): array {
         return [
             'greeting' => "Witaj " . $employee->getFirstname() . "!",
             'links' => [
-                'Panel pracownika' => 'pracownik/dane_pracownika.php',
+                'Panel pracownika' => 'pracownik/employee_data.php',
                 'Wyloguj' => 'logout.php',
             ],
         ];

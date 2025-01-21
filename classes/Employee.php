@@ -1,59 +1,121 @@
 <?php
-require_once 'User.php';
+require_once __DIR__ . "/DBHelper.php";
 
-class Employee extends User
-{
-    protected $isAdmin;
+class Employee {
+    protected $id;
+    protected $login;
+    protected $firstname;
+    protected $lastname;
+    protected $email;
     protected $phone_number;
-    protected $adress;
+    protected $address;
     protected $city;
     protected $hire_date;
-    protected $em_id;
+    protected $isAdmin;
 
-    function __construct($id)
-    {
-        require __DIR__ . "/../connect.php";
-        $sql = "SELECT * FROM employee WHERE employee.id = $id";
-        $result = $conn->query($sql)->fetch_assoc();
-        $this->em_id = $result['id'];
-        $this->login = $result['login'];
-        $this->isAdmin = $result['isAdmin'];
-        $this->firstname = $result['firstname'];
-        $this->lastname = $result['lastname'];
-        $this->email = $result['email'];
-        $this->phone_number = $result['phone_number'];
-        $this->adress = $result['adress'];
-        $this->city = $result['city'];
-        $this->hire_date = $result['hire_date'];
+    public function __construct($id = null) {
+        if ($id !== null) {
+            $this->id = $id;
+            $this->loadEmployeeData();
+        }
     }
-    public function getID(){
-        return $this->em_id;
+
+    private function loadEmployeeData() {
+        $employeeData = DBHelper::executeQuery("SELECT * FROM employee WHERE id = ?", [$this->id])->fetch_assoc();
+
+        if (!$employeeData) {
+            throw new Exception("Employee not found");
+        }
+
+        $this->login = $employeeData['login'];
+        $this->firstname = $employeeData['firstname'];
+        $this->lastname = $employeeData['lastname'];
+        $this->email = $employeeData['email'];
+        $this->phone_number = $employeeData['phone_number'];
+        $this->address = $employeeData['address'];
+        $this->city = $employeeData['city'];
+        $this->hire_date = $employeeData['hire_date'];
+        $this->isAdmin = $employeeData['isAdmin'];
     }
-    public function getNumber()
-    {
+
+    public function setProperties($login, $firstname, $lastname, $email, $phone_number, $address, $city, $hire_date, $isAdmin) {
+        $this->login = $login;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->email = $email;
+        $this->phone_number = $phone_number;
+        $this->address = $address;
+        $this->city = $city;
+        $this->hire_date = $hire_date;
+        $this->isAdmin = $isAdmin;
+    }
+
+    public function save() {
+        try {
+            if ($this->id) {
+                // Update existing employee
+                DBHelper::executeQuery(
+                    "UPDATE employee SET login = ?, firstname = ?, lastname = ?, email = ?, phone_number = ?, address = ?, city = ?, hire_date = ?, isAdmin = ? WHERE id = ?",
+                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->phone_number, $this->address, $this->city, $this->hire_date, $this->isAdmin, $this->id]
+                );
+            } else {
+                // Add new employee
+                DBHelper::executeQuery(
+                    "INSERT INTO employee (login, firstname, lastname, email, phone_number, address, city, hire_date, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->phone_number, $this->address, $this->city, $this->hire_date, $this->isAdmin]
+                );
+                $this->id = DBHelper::getConnection()->insert_id;
+            }
+        } catch (Exception $e) {
+            throw new Exception("Failed to save employee: " . $e->getMessage());
+        }
+    }
+
+    public function delete() {
+        try {
+            DBHelper::executeQuery("DELETE FROM employee WHERE id = ?", [$this->id]);
+        } catch (Exception $e) {
+            throw new Exception("Failed to delete employee: " . $e->getMessage());
+        }
+    }
+
+    public function getID() {
+        return $this->id;
+    }
+
+    public function getLogin() {
+        return $this->login;
+    }
+
+    public function getFirstname() {
+        return $this->firstname;
+    }
+
+    public function getLastname() {
+        return $this->lastname;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getPhoneNumber() {
         return $this->phone_number;
     }
-    public function getAdress()
-    {
-        return $this->adress;
-    }
-    public function getCity()
-    {
-        return $this->city;
-    }
-    public function getHireDate()
-    {
-        return $this->hire_date;
-    }
-    public function isAdmin(){
-        return $this->isAdmin;
+
+    public function getAddress() {
+        return $this->address;
     }
 
-    public function Delete(){
-        require __DIR__."/../connect.php";
-        $sql = "DELETE FROM employee WHERE id = $this->em_id";
-        if(!$conn->query($sql)){
-            throw new Exception("Wystąpił nieoczekiwany błąd. Proszę spróbować później");
-        }
+    public function getCity() {
+        return $this->city;
+    }
+
+    public function getHireDate() {
+        return $this->hire_date;
+    }
+
+    public function isAdmin() {
+        return $this->isAdmin;
     }
 }

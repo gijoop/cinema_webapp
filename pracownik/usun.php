@@ -10,7 +10,7 @@ if(isset($_GET['id_movie_del'])){
     }catch(Exception $e){
         setError("Przed usunięciem filmu usuń wszystkie powiązane z nim seanse!");
     }
-    header("Location: filmy.php");
+    header("Location: movies.php");
 }elseif(isset($_GET['id_showing_del'])){
     $showing = new Showing($_GET['id_showing_del']);
     try{
@@ -18,7 +18,7 @@ if(isset($_GET['id_movie_del'])){
     }catch(Exception $e){
         setError($e->getMessage());
     }
-    header("Location: seanse.php");
+    header("Location: showings.php");
 }elseif(isset($_GET['id_employee_del'])){
     $employee = new Employee($_GET['id_employee_del']);
     try{
@@ -29,5 +29,5 @@ if(isset($_GET['id_movie_del'])){
     }
     header("Location: pracownicy.php");
 }else{
-    header("Location: dane_pracownika.php");
+    header("Location: employee_data.php");
 }
