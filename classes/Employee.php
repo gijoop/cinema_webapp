@@ -38,47 +38,6 @@ class Employee {
         $this->isAdmin = $employeeData['isAdmin'];
     }
 
-    public function setProperties($login, $firstname, $lastname, $email, $phone_number, $address, $city, $hire_date, $isAdmin) {
-        $this->login = $login;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone_number = $phone_number;
-        $this->address = $address;
-        $this->city = $city;
-        $this->hire_date = $hire_date;
-        $this->isAdmin = $isAdmin;
-    }
-
-    public function save() {
-        try {
-            if ($this->id) {
-                // Update existing employee
-                DBHelper::executeQuery(
-                    "UPDATE employee SET login = ?, firstname = ?, lastname = ?, email = ?, phone_number = ?, address = ?, city = ?, hire_date = ?, isAdmin = ? WHERE id = ?",
-                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->phone_number, $this->address, $this->city, $this->hire_date, $this->isAdmin, $this->id]
-                );
-            } else {
-                // Add new employee
-                DBHelper::executeQuery(
-                    "INSERT INTO employee (login, firstname, lastname, email, phone_number, address, city, hire_date, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->phone_number, $this->address, $this->city, $this->hire_date, $this->isAdmin]
-                );
-                $this->id = DBHelper::getConnection()->insert_id;
-            }
-        } catch (Exception $e) {
-            throw new Exception("Failed to save employee: " . $e->getMessage());
-        }
-    }
-
-    public function delete() {
-        try {
-            DBHelper::executeQuery("DELETE FROM employee WHERE id = ?", [$this->id]);
-        } catch (Exception $e) {
-            throw new Exception("Failed to delete employee: " . $e->getMessage());
-        }
-    }
-
     public function getID() {
         return $this->id;
     }

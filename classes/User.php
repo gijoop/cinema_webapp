@@ -30,43 +30,6 @@ class User {
         $this->date_created = $userData['date_created'];
     }
 
-    public function setProperties($login, $firstname, $lastname, $email, $date_created) {
-        $this->login = $login;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->date_created = $date_created;
-    }
-
-    public function save() {
-        try {
-            if ($this->id) {
-                // Update existing user
-                DBHelper::executeQuery(
-                    "UPDATE user SET login = ?, firstname = ?, lastname = ?, email = ?, date_created = ? WHERE id = ?",
-                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->date_created, $this->id]
-                );
-            } else {
-                // Add new user
-                DBHelper::executeQuery(
-                    "INSERT INTO user (login, firstname, lastname, email, date_created) VALUES (?, ?, ?, ?, ?)",
-                    [$this->login, $this->firstname, $this->lastname, $this->email, $this->date_created]
-                );
-                $this->id = DBHelper::getConnection()->insert_id;
-            }
-        } catch (Exception $e) {
-            throw new Exception("Failed to save user: " . $e->getMessage());
-        }
-    }
-
-    public function delete() {
-        try {
-            DBHelper::executeQuery("DELETE FROM user WHERE id = ?", [$this->id]);
-        } catch (Exception $e) {
-            throw new Exception("Failed to delete user: " . $e->getMessage());
-        }
-    }
-
     public function getID() {
         return $this->id;
     }

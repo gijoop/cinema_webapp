@@ -33,7 +33,7 @@ function renderUserInfo($user) {
         </tr>
         <tr>
             <td class='table-label'>Założono</td>
-            <td>{$user->getDate()} <br></td>
+            <td>{$user->getDateCreated()} <br></td>
         </tr>
     </table>";
 }

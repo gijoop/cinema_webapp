@@ -1,4 +1,5 @@
 - zrobić dokumentację (najlepiej równolegle z projektem)
+- trigger na usuwanie kluczy obcych
 - zastąpić zapytania na procedury/funkcje w bazie danych
 - dodać jakieś triggery
 - przenieść walidację hasła do jednej funkcji

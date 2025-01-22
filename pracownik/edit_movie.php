@@ -77,11 +77,7 @@ function addSelectCategories($selectedCategoryId) {
     
     <div class="panel">
         <?php 
-        if ($employee->isAdmin()) {
-            require_once 'menu_admin.php';
-        } else {
-            require_once 'menu.php'; 
-        }
+        require_once 'menu.php'; 
         ?>
         <div class="panel-tab">
             <div class="panel-tab-header">

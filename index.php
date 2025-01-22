@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 require_once "classes/DBHelper.php";
 require_once "classes/Employee.php";
-require_once "func/functions.php";
-require_once "func/main.php";
+require_once "classes/User.php";
+require_once "classes/Showing.php";
 session_start();
 
 //Constants
@@ -15,6 +15,26 @@ const IMAGE_PATH = 'images/';
 $_SERVER['ROOT'] = __DIR__ . '/cinema_webapp';
 
 // Functions
+function getShowings($date){;
+    $result = DBHelper::executeQuery("SELECT showing.id FROM showing WHERE showing.date = ? ORDER BY time ASC", [$date])->fetch_all();
+    $output = [];
+    foreach($result as $r){
+        array_push($output, new Showing($r[0]));
+    }
+    return $output;
+}
+
+//Returns 3 upcoming movies with closest release date
+function comingMovies(){
+    $sql = "SELECT id FROM movie WHERE release_date >= CURDATE() ORDER BY release_date ASC LIMIT 3";
+    $result = DBHelper::executeQuery($sql)->fetch_all();
+    $output = [];
+    foreach($result as $r){
+        array_push($output, new Movie($r[0]));
+    }
+    return $output;
+}
+
 function getUserGreeting(): array {
     if (isset($_SESSION['user'])) {
         $user = $_SESSION['user'];
@@ -90,7 +110,7 @@ date_default_timezone_set('Europe/Warsaw');
 $date = getValidDate($_GET['date'] ?? null);
 $userData = getUserGreeting();
 $comingMovies = comingMovies();
-$showings = getShowings(formatDate($date, 'Y-m-d'));
+$showings = getShowings($date);
 
 ?>
 <!DOCTYPE html>
