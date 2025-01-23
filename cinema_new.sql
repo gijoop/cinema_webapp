@@ -73,11 +73,4 @@ END$$
 
 DELIMITER ;
 
-INSERT INTO category (name) VALUES ('Akcja'), ('Komedia'), ('Dramat'), ('Horror'), ('Sci-Fi'), ('Fantasy'), ('Thriller');
-INSERT INTO room (number, num_seats) VALUES (101, 50), (102, 50), (103, 80), (104, 80);
 
-INSERT INTO language (name) VALUES ('Dubbing PL'), ('Napisy PL'), ('Lektor PL'), ('Napisy EN');
-
-ALTER TABLE user ALTER COLUMN role SET DEFAULT 'CUSTOMER';
-ALTER TABLE user ALTER COLUMN creation_date SET DEFAULT CURRENT_DATE;
--- edit so length could be null

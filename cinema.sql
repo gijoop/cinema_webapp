@@ -83,7 +83,9 @@ CREATE TABLE `movie` (
   `poster_name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
-  CONSTRAINT `movie_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+  CONSTRAINT `movie_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`length` >= 0),
+  CONSTRAINT `CONSTRAINT_2` CHECK (`length` > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -93,7 +95,7 @@ CREATE TABLE `movie` (
 
 LOCK TABLES `movie` WRITE;
 /*!40000 ALTER TABLE `movie` DISABLE KEYS */;
-INSERT INTO `movie` VALUES (3,'Top Gun: Maverick','Po ponad 30 latach w służbie amerykańskiej marynarki wojennej Pete \"Maverick\" Mitchell (Tom Cruise) jest tam, gdzie powinien być - na szczycie. Jest mistrzowskim pilotem, testującym najnowocześniejsze maszyny. ',131,1,'2022-05-27','1737574376_top_gun.jpg'),(4,'Mission: Impossible - The Final Reckoning','Ten film nie ma jeszcze zarysu fabuły.',0,1,'2025-05-23','1737576465_mission_impossible.png'),(5,'SEPTEMBER 5','\"September 5\" ukazuje kulisy kluczowego momentu w historii przekazu medialnego, który na zawsze zmienił sposób nadawania wiadomości na żywo. Akcja filmu rozgrywa się podczas Letnich Igrzysk Olimpijskich w Monachium w 1972 roku i podąża śladem amerykańskiego zespołu transmisyjnego, który błyskawicznie przestawił się z relacjonowania wydarzeń sportowych na rejestrację porwania izraelskich sportowców.',91,1,'2025-02-28','1737576873_sept.png'),(6,'Kapitan Ameryka: Nowy wspaniały świat','W nowym filmie Marvel Studios \"Kapitan Ameryka: Nowy wspaniały świat\" w rolę Kapitana wciela się Anthony Mackie. Sam Wilson alias Falcon, którego Mackie gra w MCU, oficjalnie przyjął tytuł Kapitana Ameryki w finale serialu \"Falcon i Zimowy żołnierz\". Po spotkaniu z nowo wybranym prezydentem USA, Thaddeusem Rossem (marvelowski debiut Harrisona Forda), Sam trafia w sam środek międzynarodowego kryzysu.',118,1,'2025-02-14','1737576986_captain-america-brave-new-world-poster.jpg'),(7,'Mroczny Rycerz','W nowym filmie Batman podejmuje szeroko zakrojoną walkę z przestępczością. Z pomocą porucznika Jima Gordona i prokuratora okręgowego Harveya Denta zabiera się za rozpracowywanie istniejących organizacji przestępczych nękających mieszkańców miasta. Współpraca przynosi efekty, ale bohaterowie wkrótce padną ofiarą chaosu, który rozpęta rosnący w siłę genialny przestępca, znany przerażonym mieszkańcom Gotham jako Joker.',152,1,'2008-08-08','1737577127_asd.jpg');
+INSERT INTO `movie` VALUES (3,'Top Gun: Maverick','Po ponad 30 latach w służbie amerykańskiej marynarki wojennej Pete \"Maverick\" Mitchell (Tom Cruise) jest tam, gdzie powinien być - na szczycie. Jest mistrzowskim pilotem, testującym najnowocześniejsze maszyny. ',131,1,'2022-05-27','1737574376_top_gun.jpg'),(4,'Mission: Impossible - The Final Reckoning','Ten film nie ma jeszcze zarysu fabuły.',NULL,1,'2025-05-23','1737576465_mission_impossible.png'),(5,'SEPTEMBER 5','\"September 5\" ukazuje kulisy kluczowego momentu w historii przekazu medialnego, który na zawsze zmienił sposób nadawania wiadomości na żywo. Akcja filmu rozgrywa się podczas Letnich Igrzysk Olimpijskich w Monachium w 1972 roku i podąża śladem amerykańskiego zespołu transmisyjnego, który błyskawicznie przestawił się z relacjonowania wydarzeń sportowych na rejestrację porwania izraelskich sportowców.',91,1,'2025-02-28','1737576873_sept.png'),(6,'Kapitan Ameryka: Nowy wspaniały świat','W nowym filmie Marvel Studios \"Kapitan Ameryka: Nowy wspaniały świat\" w rolę Kapitana wciela się Anthony Mackie. Sam Wilson alias Falcon, którego Mackie gra w MCU, oficjalnie przyjął tytuł Kapitana Ameryki w finale serialu \"Falcon i Zimowy żołnierz\". Po spotkaniu z nowo wybranym prezydentem USA, Thaddeusem Rossem (marvelowski debiut Harrisona Forda), Sam trafia w sam środek międzynarodowego kryzysu.',118,1,'2025-02-14','1737576986_captain-america-brave-new-world-poster.jpg'),(7,'Mroczny Rycerz','W nowym filmie Batman podejmuje szeroko zakrojoną walkę z przestępczością. Z pomocą porucznika Jima Gordona i prokuratora okręgowego Harveya Denta zabiera się za rozpracowywanie istniejących organizacji przestępczych nękających mieszkańców miasta. Współpraca przynosi efekty, ale bohaterowie wkrótce padną ofiarą chaosu, który rozpęta rosnący w siłę genialny przestępca, znany przerażonym mieszkańcom Gotham jako Joker.',152,1,'2008-08-08','1737577127_asd.jpg');
 /*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +111,8 @@ CREATE TABLE `room` (
   `number` int(11) NOT NULL,
   `num_seats` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `number` (`number`)
+  UNIQUE KEY `number` (`number`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`num_seats` > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,7 +176,8 @@ CREATE TABLE `ticket` (
   KEY `showing_id` (`showing_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`showing_id`) REFERENCES `showing` (`id`),
-  CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`seat_number` > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -205,7 +209,8 @@ CREATE TABLE `user` (
   `role` enum('EMPLOYEE','CUSTOMER') NOT NULL DEFAULT 'CUSTOMER',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`role` in ('EMPLOYEE','CUSTOMER'))
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,4 +260,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-22 21:43:07
+-- Dump completed on 2025-01-23 18:46:24
