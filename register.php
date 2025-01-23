@@ -78,7 +78,7 @@ session_start();
                 if ($validated) {
                     $password_hash = password_hash($password, PASSWORD_DEFAULT);
                     DBHelper::executeQuery(
-                        "INSERT INTO user (login, password, firstname, lastname, email, creation_date, role) VALUES (?, ?, ?, ?, ?, 'CUSTOMER')",
+                        "INSERT INTO user (login, password, firstname, lastname, email, role) VALUES (?, ?, ?, ?, 'CUSTOMER')",
                         [$login, $password_hash, $firstname, $lastname, $email]
                     );
                     $_SESSION['register_success'] = true;
