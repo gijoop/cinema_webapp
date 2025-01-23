@@ -89,6 +89,6 @@ class Movie
 
     public function getPosterLink()
     {
-        return "/omega/posters/" . $this->poster_name;
+        return "/cinema_webapp/posters/" . $this->poster_name;
     }
 }

@@ -42,7 +42,7 @@ function renderUserTickets($userId) {
     $tickets = DBHelper::executeQuery(
         "SELECT showing.date showing_date, 
         showing.time showing_time, 
-        showing.hall_id hall_id, 
+        showing.room_id room_id, 
         language.name language,
         movie.title title,
         ticket.seat_number seat_number
@@ -74,7 +74,7 @@ function renderUserTickets($userId) {
             <td>{$ticket['title']}</td>
             <td>{$ticket['showing_date']}</td>
             <td>{$ticket['showing_time']}</td>
-            <td>{$ticket['hall_id']}</td>
+            <td>{$ticket['room_id']}</td>
             <td>{$ticket['seat_number']}</td>
             <td>{$ticket['language']}</td>
         </tr>";

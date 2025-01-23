@@ -34,7 +34,7 @@ session_start();
                     $password = $_POST['password'];
 
                     try {
-                        $user = DBHelper::executeQuery("SELECT * FROM user WHERE login = ?", [$login])->fetch_assoc();
+                        $user = DBHelper::executeQuery("SELECT id, password FROM user WHERE login = ?", [$login])->fetch_assoc();
 
                         if ($user) {
                             $hash_password = $user['password'];

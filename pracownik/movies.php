@@ -1,15 +1,21 @@
 <?php 
-require_once __DIR__."/../classes/Employee.php";
+require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Movie.php";
 require_once __DIR__."/../classes/Category.php";
 require_once __DIR__."/../classes/DBHelper.php";
 session_start();
 
-if (!isset($_SESSION['employee'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
     exit();
 }
-$employee = $_SESSION['employee'];
+
+$user = $_SESSION['user'];
+
+if(!$user->isEmployee()){
+    header("Location: ../index.php");
+    exit();
+}
 
 if (isset($_POST['submit_movie'])) {
     $title = $_POST['title'];
@@ -19,33 +25,29 @@ if (isset($_POST['submit_movie'])) {
     $date = $_POST['date'];
     $poster = $_FILES['poster'];
 
-    try {
-        $poster_name = null;
-        if ($poster['name']) {
-            $poster_name = time() . "_" . basename($poster['name']);
-            move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
-        }
-        DBHelper::executeQuery(
-            "INSERT INTO movie (title, description, category_id, length, release_date, poster_name) VALUES (?, ?, ?, ?, ?, ?)",
-            [$title, $description, $category_id, $length, $date, $poster_name]
-        );
-        header("Location: movies.php");
-        exit();
-    } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
+    $poster_name = null;
+    if ($poster['name']) {
+        $poster_name = time() . "_" . basename($poster['name']);
+        move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
     }
+    DBHelper::executeQuery(
+        "INSERT INTO movie (title, description, category_id, length, release_date, poster_name) VALUES (?, ?, ?, ?, ?, ?)",
+        [$title, $description, $category_id, $length, $date, $poster_name]
+    );
+    header("Location: movies.php");
+    exit();
 }
 
 if (isset($_POST['delete_movie'])) {
     $movie_id = $_POST['movie_id'];
-
-    try {
-        DBHelper::executeQuery("DELETE FROM movie WHERE id = ?", [$movie_id]);
-        header("Location: movies.php");
-        exit();
-    } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
+    $poster_name = DBHelper::executeQuery("SELECT poster_name FROM movie WHERE id = ?", [$movie_id])->fetch_assoc()['poster_name'];
+    if ($poster_name) {
+        unlink("../posters/" . $poster_name);
     }
+    DBHelper::executeQuery("DELETE FROM movie WHERE id = ?", [$movie_id]);
+    header("Location: movies.php");
+    exit();
+
 }
 
 function addSelectCategories() {

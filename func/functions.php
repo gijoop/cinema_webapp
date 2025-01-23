@@ -45,9 +45,9 @@ function addSelectMovies(){
         echo "<option value='$id'>".$name."</option>";
     }
 }
-function addSelectHalls(){
+function addSelectRooms(){
     require __DIR__."/../connect.php";
-    $sql = "SELECT id FROM hall";
+    $sql = "SELECT id FROM room";
     $results = $conn->query($sql)->fetch_all();
     foreach($results as $h){
         $id = $h[0];

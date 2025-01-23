@@ -1,3 +1,18 @@
+<?php 
+require_once "../classes/User.php";
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
+    exit();
+}
+$user = $_SESSION['user'];
+if(!$user->isEmployee()){
+    header("Location: ../index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -8,16 +23,6 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="shortcut icon" href="../images/icon.ico" type="image/x-icon">
     <title>Sieć kin Omega</title>
-    <?php 
-        require_once __DIR__."/../classes/Employee.php";
-        session_start();
-
-        if (!isset($_SESSION['employee'])) {
-            header("Location: index.php");
-            exit();
-        }
-        $employee = $_SESSION['employee'];
-    ?>
 </head>
 <body>
     <div class="top-panel">
@@ -31,36 +36,38 @@
     </div>
     
     <div class="panel">
-        <?php 
-        require_once 'menu.php'; 
-        ?>
+        <div class="panel-menu">
+            <a href="employee_data.php" class="panel-menu-button">Pracownik</a>
+            <a href="showings.php" class="panel-menu-button">Seanse</a>
+            <a href="movies.php" class="panel-menu-button">Filmy</a>
+        </div>
         <div class="panel-tab">
             <div class="panel-tab-header">
-                Dane użytkownika <br> <hr class="hr-break">
+                Dane pracownika <br> <hr class="hr-break">
             </div>
 
             <table class="panel-table">
                 <tr>
                     <td class="table-label">Imię</td>
-                    <td><?php echo $employee->getFirstname() ?> <br></td>
+                    <td><?php echo $user->getFirstname() ?> <br></td>
                 </tr>
                 <tr>
                     <td class="table-label">Nazwisko</td>
-                    <td><?php echo $employee->getLastname() ?> <br></td>
+                    <td><?php echo $user->getLastname() ?> <br></td>
                 </tr>
                 <tr>
                     <td class="table-label">Login/nickname</td>
-                    <td><?php echo $employee->getLogin() ?> <br></td>
+                    <td><?php echo $user->getLogin() ?> <br></td>
                 </tr>
                 <tr>
                     <td class="table-label">Adres E-mail</td>
-                    <td><?php echo $employee->getEmail() ?> <br></td>
+                    <td><?php echo $user->getEmail() ?> <br></td>
                 </tr>
                 <tr>
                     <td class="table-label">Data utworzenia</td>
-                    <td><?php echo $employee->getHireDate() ?> <br></td>
+                    <td><?php echo $user->getDateCreated() ?> <br></td>
                 </tr>
-            </table><br><br>
+            </table><br><br><br><br>
             <a href="../change_passwd.php" class="showing-button">Zmień hasło</a>
         </div>
     </div>

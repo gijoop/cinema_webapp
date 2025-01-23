@@ -1,3 +1,6 @@
+-- Active: 1729100053215@@127.0.0.1@3306@cinema
+USE cinema;
+
 CREATE TABLE user (
   id integer PRIMARY KEY AUTO_INCREMENT,
   login varchar(20) UNIQUE NOT NULL,
@@ -6,15 +9,17 @@ CREATE TABLE user (
   lastname varchar(30) NOT NULL,
   email varchar(60) UNIQUE NOT NULL,
   creation_date date NOT NULL,
-  role ENUM('EMPLOYEE', 'CUSTOMER') NOT NULL,
+  role ENUM('EMPLOYEE', 'CUSTOMER') NOT NULL
 );
 
 CREATE TABLE movie (
   id integer PRIMARY KEY AUTO_INCREMENT,
   title varchar(100) NOT NULL,
   description varchar(1000),
-  length integer NOT NULL,
+  length integer,
   category_id integer NOT NULL,
+  release_date date,
+  poster_name varchar(100) NOT NULL,
   FOREIGN KEY (category_id) REFERENCES category (id)
 );
 
@@ -34,7 +39,8 @@ CREATE TABLE showing (
   movie_id integer NOT NULL,
   room_id integer NOT NULL,
   language_id integer NOT NULL,
-  datetime datetime NOT NULL,
+  date date NOT NULL,
+  time time NOT NULL,
   FOREIGN KEY (movie_id) REFERENCES movie (id),
   FOREIGN KEY (room_id) REFERENCES room (id),
   FOREIGN KEY (language_id) REFERENCES language (id)
@@ -53,3 +59,25 @@ CREATE TABLE language (
   id integer PRIMARY KEY AUTO_INCREMENT,
   name varchar(20) UNIQUE NOT NULL
 );
+
+DELIMITER $$
+
+CREATE OR REPLACE PROCEDURE get_upcoming_movies()
+BEGIN
+    SELECT *
+    FROM movie
+    WHERE movie.release_date > CURDATE()
+    ORDER BY movie.release_date
+    LIMIT 3;
+END$$
+
+DELIMITER ;
+
+INSERT INTO category (name) VALUES ('Akcja'), ('Komedia'), ('Dramat'), ('Horror'), ('Sci-Fi'), ('Fantasy'), ('Thriller');
+INSERT INTO room (number, num_seats) VALUES (101, 50), (102, 50), (103, 80), (104, 80);
+
+INSERT INTO language (name) VALUES ('Dubbing PL'), ('Napisy PL'), ('Lektor PL'), ('Napisy EN');
+
+ALTER TABLE user ALTER COLUMN role SET DEFAULT 'CUSTOMER';
+ALTER TABLE user ALTER COLUMN creation_date SET DEFAULT CURRENT_DATE;
+-- edit so length could be null

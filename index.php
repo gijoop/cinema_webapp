@@ -4,77 +4,24 @@
 declare(strict_types=1);
 
 require_once "classes/DBHelper.php";
-require_once "classes/Employee.php";
 require_once "classes/User.php";
 require_once "classes/Showing.php";
 session_start();
 
-//Constants
-const DATE_FORMAT = 'd.m.Y';
+// Constants
+const DATE_FORMAT = 'Y-m-d';
+const DISPLAY_DATE_FORMAT = 'd.m.Y';
 const IMAGE_PATH = 'images/';
 $_SERVER['ROOT'] = __DIR__ . '/cinema_webapp';
 
-// Functions
-function getShowings($date){;
-    $result = DBHelper::executeQuery("SELECT showing.id FROM showing WHERE showing.date = ? ORDER BY time ASC", [$date])->fetch_all();
-    $output = [];
-    foreach($result as $r){
-        array_push($output, new Showing($r[0]));
-    }
-    return $output;
-}
-
-//Returns 3 upcoming movies with closest release date
-function comingMovies(){
-    $sql = "SELECT id FROM movie WHERE release_date >= CURDATE() ORDER BY release_date ASC LIMIT 3";
-    $result = DBHelper::executeQuery($sql)->fetch_all();
-    $output = [];
-    foreach($result as $r){
-        array_push($output, new Movie($r[0]));
-    }
-    return $output;
-}
-
-function getUserGreeting(): array {
-    if (isset($_SESSION['user'])) {
-        $user = $_SESSION['user'];
-        return [
-            'greeting' => "Witaj " . $user->getFirstname() . "!",
-            'links' => [
-                'Panel użytkownika' => 'user_panel.php',
-                'Wyloguj' => 'logout.php',
-            ],
-        ];
-    } elseif (isset($_SESSION['employee'])) {
-        $employee = $_SESSION['employee'];
-        return [
-            'greeting' => "Witaj " . $employee->getFirstname() . "!",
-            'links' => [
-                'Panel pracownika' => 'pracownik/employee_data.php',
-                'Wyloguj' => 'logout.php',
-            ],
-        ];
-    }
-    return [
-        'links' => [
-            'Zaloguj' => 'login.php',
-            'Zarejestruj' => 'register.php',
-        ],
-    ];
-}
-
-function getValidDate(?string $requestedDate): string {
-    $currentDate = date(DATE_FORMAT);
-    if (!$requestedDate || strtotime($requestedDate) < strtotime($currentDate)) {
-        return $currentDate;
-    }
-    return $requestedDate;
+function formatDate(string $date, string $format = DISPLAY_DATE_FORMAT): string {
+    return date($format, strtotime($date));
 }
 
 function renderMovie($movie): string {
     $title = $movie->getTitle();
     $releaseDate = formatDate($movie->getDate());
-    $img = $movie->posterLink();
+    $img = $movie->getPosterLink();
     return "<div class='comingmovie'>
         <div style='background-image: url($img)' class='moviephoto'></div>
         <b>$title</b><br>
@@ -82,17 +29,13 @@ function renderMovie($movie): string {
     </div>";
 }
 
-function renderShowing($showing, string $currentDate): string {
+function renderShowing($showing): string {
     $id = $showing->getID();
     $movie = $showing->getMovie();
     $time = $showing->getTime();
 
-    if ($currentDate == date('Y-m-d') && strtotime($time) < strtotime(date('H:i'))) {
-        return ''; // Skip past showings
-    }
-
     return "<div class='showing'>
-        <div class='showing-img' style='background-image: url({$movie->posterLink()})'></div>
+        <div class='showing-img' style='background-image: url({$movie->getPosterLink()})'></div>
         <div class='showing-properties'>
             <span class='showing-title'>{$movie->getTitle()}</span>
             <span class='showing-details'>{$movie->getLength('h')} &nbsp {$movie->getCategory()} &nbsp {$movie->getDate()} &nbsp {$showing->getLanguage()}</span>
@@ -105,13 +48,14 @@ function renderShowing($showing, string $currentDate): string {
     </div>";
 }
 
-// Main Logic
 date_default_timezone_set('Europe/Warsaw');
-$date = getValidDate($_GET['date'] ?? null);
-$userData = getUserGreeting();
-$comingMovies = comingMovies();
-$showings = getShowings($date);
+$date = isset($_GET['date']) ? formatDate($_GET['date'], DATE_FORMAT) : date(DATE_FORMAT);
+$comingMovies = DBHelper::executeProcedure("get_upcoming_movies")->fetch_all();
+$showings = DBHelper::executeQuery("SELECT id FROM showing WHERE date = ? ORDER BY time ASC", [$date])->fetch_all();
 
+if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -131,9 +75,16 @@ $showings = getShowings($date);
     </div>
     <div class="top-box" style="justify-content: right; width:40%;">
         <?php
-        echo isset($userData['greeting']) ? "<h1 class='greeting'>{$userData['greeting']}</h1>" : '';
-        foreach ($userData['links'] as $text => $url) {
-            echo "<a href='{$url}' class='form-button'>{$text}</a>";
+        if (isset($user)){
+            echo "<h1 class='greeting'>Witaj {$user->getFirstname()}!</h1>";
+            if($user->isEmployee()){
+                echo "<a href='pracownik/employee_data.php' class='form-button'>Panel pracownika</a>";
+            }
+            echo "<a href='user_panel.php' class='form-button'>Panel użytkownika</a>";
+            echo "<a href='logout.php' class='form-button'>Wyloguj</a>";
+        }else{
+            echo "<a href='login.php' class='form-button'>Zaloguj</a>";
+            echo "<a href='register.php' class='form-button'>Zarejestruj</a>";
         }
         ?>
     </div>
@@ -146,7 +97,7 @@ $showings = getShowings($date);
     <div class="comingsoon">
         <?php 
         foreach ($comingMovies as $movie) {
-            echo renderMovie($movie);
+            echo renderMovie(new Movie($movie[0]));
         }
         ?>
     </div>
@@ -156,14 +107,16 @@ $showings = getShowings($date);
     </div>
     <div class="date-picker">
         <?php 
-        $dplus = date(DATE_FORMAT, strtotime($date . '+1 day'));
-        $dminus = date(DATE_FORMAT, strtotime($date . '-1 day'));
+        $dplus = formatDate(date(DATE_FORMAT, strtotime($date . ' +1 day')));
+        $dminus = formatDate(date(DATE_FORMAT, strtotime($date . ' -1 day')));
 
-        echo (strtotime($date) > strtotime(date(DATE_FORMAT))) 
-            ? "<a href='index.php?date=$dminus#showings' class='date-button'> < </a>" 
-            : "<div class='date-button-unactive date-button'> < </div>";
+        if (strtotime($date) > strtotime(date(DATE_FORMAT))) {
+            echo "<a href='index.php?date=$dminus#showings' class='date-button'> < </a>";
+        } else {
+            echo "<div class='date-button-unactive date-button'> < </div>";
+        }
 
-        echo $date;
+        echo formatDate($date);
 
         echo "<a href='index.php?date=$dplus#showings' class='date-button'> > </a>";
         ?>
@@ -175,7 +128,7 @@ $showings = getShowings($date);
         echo "<h2>W tym dniu repertuar jest pusty</h2>";
     } else {
         foreach ($showings as $showing) {
-            echo renderShowing($showing, formatDate($date, 'Y-m-d'));
+            echo renderShowing(new Showing($showing[0]), $date);
         }
     }
     ?>

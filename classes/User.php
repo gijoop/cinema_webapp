@@ -7,7 +7,8 @@ class User {
     protected $firstname;
     protected $lastname;
     protected $email;
-    protected $date_created;
+    protected $creation_date;
+    protected $isEmployee;
 
     public function __construct($id = null) {
         if ($id !== null) {
@@ -27,7 +28,8 @@ class User {
         $this->firstname = $userData['firstname'];
         $this->lastname = $userData['lastname'];
         $this->email = $userData['email'];
-        $this->date_created = $userData['date_created'];
+        $this->creation_date = $userData['creation_date'];
+        $this->isEmployee = $userData['role'] == 'EMPLOYEE' ? true : false;
     }
 
     public function getID() {
@@ -51,6 +53,10 @@ class User {
     }
 
     public function getDateCreated() {
-        return $this->date_created;
+        return $this->creation_date;
+    }
+
+    public function isEmployee() {
+        return $this->isEmployee;
     }
 }

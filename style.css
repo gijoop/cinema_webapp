@@ -176,7 +176,7 @@ table{
     .showing-button{
         line-height: 0px;
         padding: 22px 15px;
-        margin: 0 20px 10px 0;
+        margin: 20px 0 10px 0;
         font-size: 18px;
         border-radius: 5px;
         border: 2px solid red;

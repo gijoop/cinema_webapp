@@ -7,7 +7,7 @@ class Showing {
     protected $movie;
     protected $date;
     protected $time;
-    protected $hall_id;
+    protected $room_id;
     protected $language_id;
 
     function __construct($id) {
@@ -25,7 +25,7 @@ class Showing {
         $this->movie = new Movie($showingData['movie_id']);
         $this->date = $showingData['date'];
         $this->time = $showingData['time'];
-        $this->hall_id = $showingData['hall_id'];
+        $this->room_id = $showingData['room_id'];
         $this->language_id = $showingData['language_id'];
     }
 
@@ -45,13 +45,13 @@ class Showing {
         return date('H:i', strtotime($this->time));
     }
 
-    public function getHall() {
-        return $this->hall_id;
+    public function getRoom() {
+        return $this->room_id;
     }
 
     public function getSeatsNum() {
-        $result = DBHelper::executeQuery("SELECT seats FROM hall WHERE id = ?", [$this->hall_id])->fetch_assoc();
-        return $result['seats'];
+        $result = DBHelper::executeQuery("SELECT num_seats FROM room WHERE id = ?", [$this->room_id])->fetch_assoc();
+        return $result['num_seats'];
     }
 
     public function getLanguage() {

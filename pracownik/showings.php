@@ -1,46 +1,46 @@
 <?php 
-require_once __DIR__."/../classes/Employee.php";
+require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Showing.php";
 require_once __DIR__."/../classes/Movie.php";
 require_once __DIR__."/../classes/DBHelper.php";
+
 session_start();
 
-if (!isset($_SESSION['employee'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
     exit();
 }
-$employee = $_SESSION['employee'];
+
+$user = $_SESSION['user'];
+
+if(!$user->isEmployee()){
+    header("Location: ../index.php");
+    exit();
+}
 
 if (isset($_POST['submit_showing'])) {
     $movie_id = $_POST['movie_id'];
     $date = $_POST['date'];
     $time = $_POST['time'];
-    $hall_id = $_POST['hall_id'];
+    $room_id = $_POST['room_id'];
     $language_id = $_POST['language_id'];
 
-    try {
-        DBHelper::executeQuery(
-            "INSERT INTO showing (movie_id, date, time, hall_id, language_id) VALUES (?, ?, ?, ?, ?)",
-            [$movie_id, $date, $time, $hall_id, $language_id]
-        );
-        header("Location: showings.php");
-        exit();
-    } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
-    }
+    DBHelper::executeQuery(
+        "INSERT INTO showing (movie_id, date, time, room_id, language_id) VALUES (?, ?, ?, ?, ?)",
+        [$movie_id, $date, $time, $room_id, $language_id]
+    );
+    header("Location: showings.php");
+    exit();
+
 }
 
 if (isset($_POST['delete_showing'])) {
     $showing_id = $_POST['showing_id'];
 
-    try {
-        DBHelper::executeQuery("DELETE FROM ticket WHERE showing_id = ?", [$showing_id]);
-        DBHelper::executeQuery("DELETE FROM showing WHERE id = ?", [$showing_id]);
-        header("Location: showings.php");
-        exit();
-    } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
-    }
+    DBHelper::executeQuery("DELETE FROM ticket WHERE showing_id = ?", [$showing_id]);
+    DBHelper::executeQuery("DELETE FROM showing WHERE id = ?", [$showing_id]);
+    header("Location: showings.php");
+    exit();
 }
 
 function addSelectOptions($table, $name, $value) {
@@ -95,8 +95,8 @@ function addSelectOptions($table, $name, $value) {
                 </select>
                 <input type="date" name="date" placeholder="Data" class="panel-input" required> 
                 <input type="time" name="time" placeholder="Godzina" class="panel-input" required>
-                <select name="hall_id" placeholder="Sala" class="panel-input">
-                    <?php addSelectOptions('hall', 'id', 'id'); ?>
+                <select name="room_id" placeholder="Sala" class="panel-input">
+                    <?php addSelectOptions('room', 'id', 'id'); ?>
                 </select>
                 <select name="language_id" placeholder="Język" class="panel-input">
                     <?php addSelectOptions('language', 'name', 'id'); ?>
@@ -125,7 +125,7 @@ function addSelectOptions($table, $name, $value) {
                     echo "<td>".$showing->getMovie()->getTitle()."</td>";
                     echo "<td>".$showing->getDate()."</td>";
                     echo "<td>".$showing->getTime()."</td>";
-                    echo "<td>".$showing->getHall()."</td>";
+                    echo "<td>".$showing->getRoom()."</td>";
                     echo "<td>".$showing->getLanguage()."</td>";
                     echo "<td>
                             <a href='edit_showing.php?id=$id' style='color: lightgreen; cursor:pointer'>Edytuj</a>

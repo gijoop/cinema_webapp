@@ -1,6 +1,4 @@
 - zrobić dokumentację (najlepiej równolegle z projektem)
-- trigger na usuwanie kluczy obcych
+- trigger na usuwanie kluczy obcych, inne triggery
+- więzy?
 - zastąpić zapytania na procedury/funkcje w bazie danych
-- dodać jakieś triggery
-- przenieść walidację hasła do jednej funkcji
-- ugenerycznić zmianę hasła dla użytkownika i pracownika

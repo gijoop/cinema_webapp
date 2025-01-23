@@ -1,15 +1,21 @@
 <?php 
-require_once __DIR__."/../classes/Employee.php";
+require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Showing.php";
 require_once __DIR__."/../classes/Movie.php";
 require_once __DIR__."/../classes/DBHelper.php";
 session_start();
 
-if (!isset($_SESSION['employee'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
     exit();
 }
-$employee = $_SESSION['employee'];
+
+$user = $_SESSION['user'];
+
+if(!$user->isEmployee()){
+    header("Location: ../index.php");
+    exit();
+}
 
 if (!isset($_GET['id'])) {
     header("Location: seanse.php");
@@ -23,13 +29,13 @@ if (isset($_POST['submit_edit_showing'])) {
     $movie_id = $_POST['movie_id'];
     $date = $_POST['date'];
     $time = $_POST['time'];
-    $hall_id = $_POST['hall_id'];
+    $room_id = $_POST['room_id'];
     $language_id = $_POST['language_id'];
 
     try {
         DBHelper::executeQuery(
-            "UPDATE showing SET movie_id = ?, date = ?, time = ?, hall_id = ?, language_id = ? WHERE id = ?",
-            [$movie_id, $date, $time, $hall_id, $language_id, $showing_id]
+            "UPDATE showing SET movie_id = ?, date = ?, time = ?, room_id = ?, language_id = ? WHERE id = ?",
+            [$movie_id, $date, $time, $room_id, $language_id, $showing_id]
         );
         header("Location: showings.php");
         exit();
@@ -83,8 +89,8 @@ function addSelectOptions($table, $name, $value, $selectedValue) {
                 </select>
                 <input type="date" name="date" placeholder="Data" class="panel-input" value="<?php echo $showing->getDate(); ?>" required> 
                 <input type="time" name="time" placeholder="Godzina" class="panel-input" value="<?php echo $showing->getTime(); ?>" required>
-                <select name="hall_id" placeholder="Sala" class="panel-input">
-                    <?php addSelectOptions('hall', 'id', 'id', $showing->getHall()); ?>
+                <select name="room_id" placeholder="Sala" class="panel-input">
+                    <?php addSelectOptions('room', 'id', 'id', $showing->getRoom()); ?>
                 </select>
                 <select name="language_id" placeholder="Język" class="panel-input">
                     <?php addSelectOptions('language', 'name', 'id', $showing->getLanguageID()); ?>

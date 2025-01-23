@@ -4,7 +4,7 @@ require_once "classes/User.php";
 require_once "classes/Employee.php";
 session_start();
 
-if (!isset($_SESSION['user']) && !isset($_SESSION['employee'])) {
+if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit();
 }
@@ -38,13 +38,8 @@ if (!isset($_SESSION['user']) && !isset($_SESSION['employee'])) {
                 $old_check = $_POST['old'];
                 $new = $_POST['new'];
 
-                if (isset($_SESSION['employee'])) {
-                    $id = $_SESSION['employee']->getID();
-                    $result = DBHelper::executeQuery("SELECT password FROM employee WHERE id = ?", [$id])->fetch_assoc();
-                } elseif (isset($_SESSION['user'])) {
-                    $id = $_SESSION['user']->getID();
-                    $result = DBHelper::executeQuery("SELECT password FROM user WHERE id = ?", [$id])->fetch_assoc();
-                }
+                $id = $_SESSION['user']->getID();
+                $result = DBHelper::executeQuery("SELECT password FROM user WHERE id = ?", [$id])->fetch_assoc();
 
                 if (!$result || !password_verify($old_check, $result['password'])) {
                     echo '<h1 class="error">Stare hasło się nie zgadza!</h1>';
@@ -62,15 +57,9 @@ if (!isset($_SESSION['user']) && !isset($_SESSION['employee'])) {
                 }
 
                 $new_hashed = password_hash($new, PASSWORD_DEFAULT);
-                if (isset($_SESSION['employee'])) {
-                    DBHelper::executeQuery("UPDATE employee SET password = ? WHERE id = ?", [$new_hashed, $id]);
-                    session_unset();
-                    header("Location: pracownik/index.php");
-                } elseif (isset($_SESSION['user'])) {
-                    DBHelper::executeQuery("UPDATE user SET password = ? WHERE id = ?", [$new_hashed, $id]);
-                    session_unset();
-                    header("Location: login.php");
-                }
+                DBHelper::executeQuery("UPDATE user SET password = ? WHERE id = ?", [$new_hashed, $id]);
+                session_unset();
+                header("Location: login.php");
                 exit();
             }
             ?>

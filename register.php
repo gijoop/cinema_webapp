@@ -44,53 +44,46 @@ session_start();
                 $firstname = mb_convert_case(mb_strtolower($_POST['firstname'], 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
                 $lastname = mb_convert_case(mb_strtolower($_POST['lastname'], 'UTF-8'), MB_CASE_TITLE, 'UTF-8');
                 $password = $_POST['password'];
-                $date = date("Y-m-d");
 
                 $validated = true;
 
-                try {
-                    $dbHelper = new DBHelper();
+                // Validation
+                if (!$login) {
+                    echo '<h1 class="error">Nie podano loginu</h1>';
+                    $validated = false;
+                } elseif (mb_strlen($login) < 4 || mb_strlen($login) > 20) {
+                    echo '<h1 class="error">Login powinien mieć od 4 do 20 znaków</h1>';
+                    $validated = false;
+                } elseif (!ctype_alnum($login)) {
+                    echo '<h1 class="error">Login powinien się składać tylko z liter a-Z bez polskich znaków i cyfr 0-9</h1>';
+                    $validated = false;
+                } elseif (DBHelper::executeQuery("SELECT id FROM user WHERE login = ?", [$login])->num_rows > 0) {
+                    echo '<h1 class="error">Podany login już istnieje</h1>';
+                    $validated = false;
+                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    echo '<h1 class="error">Nieprawidłowy adres e-mail</h1>';
+                    $validated = false;
+                } elseif (!$firstname || !preg_match('/^[a-zA-ZąĄęóÓłŁśŚżŻźŹćĆńŃ]+$/u', $firstname)) {
+                    echo '<h1 class="error">Nieprawidłowe imię</h1>';
+                    $validated = false;
+                } elseif (!$lastname || !preg_match('/^[a-zA-ZąĄęóÓłŁśŚżŻźŹćĆńŃ]+$/u', $lastname)) {
+                    echo '<h1 class="error">Nieprawidłowe nazwisko</h1>';
+                    $validated = false;
+                } elseif (!$password || mb_strlen($password) <= 6) {
+                    echo '<h1 class="error">Hasło powinno być dłuższe niż 6 znaków!</h1>';
+                    $validated = false;
+                }
 
-                    // Validation
-                    if (!$login) {
-                        echo '<h1 class="error">Nie podano loginu</h1>';
-                        $validated = false;
-                    } elseif (mb_strlen($login) < 4 || mb_strlen($login) > 20) {
-                        echo '<h1 class="error">Login powinien mieć od 4 do 20 znaków</h1>';
-                        $validated = false;
-                    } elseif (!ctype_alnum($login)) {
-                        echo '<h1 class="error">Login powinien się składać tylko z liter a-Z bez polskich znaków i cyfr 0-9</h1>';
-                        $validated = false;
-                    } elseif ($dbHelper->executeQuery("SELECT id FROM user WHERE login = ?", [$login])->num_rows > 0) {
-                        echo '<h1 class="error">Podany login już istnieje</h1>';
-                        $validated = false;
-                    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        echo '<h1 class="error">Nieprawidłowy adres e-mail</h1>';
-                        $validated = false;
-                    } elseif (!$firstname || !preg_match('/^[a-zA-ZąĄęóÓłŁśŚżŻźŹćĆńŃ]+$/u', $firstname)) {
-                        echo '<h1 class="error">Nieprawidłowe imię</h1>';
-                        $validated = false;
-                    } elseif (!$lastname || !preg_match('/^[a-zA-ZąĄęóÓłŁśŚżŻźŹćĆńŃ]+$/u', $lastname)) {
-                        echo '<h1 class="error">Nieprawidłowe nazwisko</h1>';
-                        $validated = false;
-                    } elseif (!$password || mb_strlen($password) <= 6) {
-                        echo '<h1 class="error">Hasło powinno być dłuższe niż 6 znaków!</h1>';
-                        $validated = false;
-                    }
-
-                    // Registration
-                    if ($validated) {
-                        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-                        $dbHelper->executeQuery(
-                            "INSERT INTO user (login, password, firstname, lastname, email, date_created) VALUES (?, ?, ?, ?, ?, ?)",
-                            [$login, $password_hash, $firstname, $lastname, $email, $date]
-                        );
-                        $_SESSION['register_success'] = true;
-                        header("Location: register.php");
-                        exit();
-                    }
-                } catch (Exception $e) {
-                    echo '<h1 class="error">Wystąpił błąd. Spróbuj ponownie później.</h1>';
+                // Registration
+                if ($validated) {
+                    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                    DBHelper::executeQuery(
+                        "INSERT INTO user (login, password, firstname, lastname, email, creation_date, role) VALUES (?, ?, ?, ?, ?, 'CUSTOMER')",
+                        [$login, $password_hash, $firstname, $lastname, $email]
+                    );
+                    $_SESSION['register_success'] = true;
+                    header("Location: register.php");
+                    exit();
                 }
             } else {
                 echo '<h1 class="error">&nbsp</h1>';

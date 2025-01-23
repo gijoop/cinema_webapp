@@ -4,7 +4,7 @@ class DBHelper {
     private static $connection = null;
 
     private static $host = "localhost";
-    private static $username = "cinema_app";
+    private static $username = "cinema_webapp";
     private static $password = "ultra_secure_app_password";
     private static $database = "cinema";
 

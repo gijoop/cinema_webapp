@@ -1,15 +1,21 @@
 <?php 
-require_once __DIR__."/../classes/Employee.php";
+require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Movie.php";
 require_once __DIR__."/../classes/Category.php";
 require_once __DIR__."/../classes/DBHelper.php";
 session_start();
 
-if (!isset($_SESSION['employee'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
     exit();
 }
-$employee = $_SESSION['employee'];
+
+$user = $_SESSION['user'];
+
+if(!$user->isEmployee()){
+    header("Location: ../index.php");
+    exit();
+}
 
 if (!isset($_GET['id'])) {
     header("Location: movies.php");
