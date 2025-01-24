@@ -84,8 +84,7 @@ CREATE TABLE `movie` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `movie_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  CONSTRAINT `CONSTRAINT_1` CHECK (`length` >= 0),
-  CONSTRAINT `CONSTRAINT_2` CHECK (`length` > 0)
+  CONSTRAINT `CONSTRAINT_1` CHECK (`length` > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -112,7 +111,8 @@ CREATE TABLE `room` (
   `num_seats` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `number` (`number`),
-  CONSTRAINT `CONSTRAINT_1` CHECK (`num_seats` > 0)
+  CONSTRAINT `CONSTRAINT_1` CHECK (`num_seats` > 0),
+  CONSTRAINT `CONSTRAINT_2` CHECK (`number` > 0)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
