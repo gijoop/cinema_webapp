@@ -8,6 +8,7 @@ class Showing {
     protected $date;
     protected $time;
     protected $room_id;
+    protected $room_number;
     protected $language_id;
 
     function __construct($id) {
@@ -26,6 +27,7 @@ class Showing {
         $this->date = $showingData['date'];
         $this->time = $showingData['time'];
         $this->room_id = $showingData['room_id'];
+        $this->room_number = DBHelper::executeQuery("SELECT number FROM room WHERE id = ?", [$this->room_id])->fetch_assoc()['number'];
         $this->language_id = $showingData['language_id'];
     }
 
@@ -46,7 +48,7 @@ class Showing {
     }
 
     public function getRoom() {
-        return $this->room_id;
+        return $this->room_number;
     }
 
     public function getSeatsNum() {

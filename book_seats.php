@@ -44,19 +44,23 @@
             setcookie("booked_seats", "", time() - 3600, "/");
             $user_id = $user->getID();
 
-            foreach ($booked_seats as $seat) {
-                $check = DBHelper::executeQuery("SELECT * FROM ticket WHERE showing_id = ? AND seat_number = ?", [$showing_id, $seat]);
-                if ($check->num_rows == 0) {
-                    DBHelper::executeQuery("INSERT INTO ticket (showing_id, user_id, seat_number) VALUES (?, ?, ?)", [$showing_id, $user_id, $seat]);
-                } else {
-                    setError("Miejsce $seat jest już zajęte!");
-                    header("Location: book_seats.php?id=$showing_id");
-                    exit();
+            DBHelper::beginTransaction();
+            try{
+                foreach ($booked_seats as $seat) {
+                    if (DBHelper::callFunction("is_seat_available", [$showing_id, $seat])) {
+                        DBHelper::executeQuery("INSERT INTO ticket (showing_id, user_id, seat_number) VALUES (?, ?, ?)", [$showing_id, $user_id, $seat]);
+                    } else {
+                        DBHelper::rollbackTransaction();
+                        header("Location: book_seats.php?id=$showing_id");
+                        exit();
+                    }
                 }
+                DBHelper::commitTransaction();
+                header("Location: user_panel.php");
+                exit();
+            } catch (Exception $e) {
+                DBHelper::rollbackTransaction();
             }
-            echo '<script>alert("Pomyślnie zarezerwowano siedzenie/a!");</script>';
-            header("Location: user_panel.php");
-            exit();
         }
     ?>
 </head>

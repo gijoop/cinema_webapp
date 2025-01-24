@@ -3,11 +3,6 @@
 class DBHelper {
     private static $connection = null;
 
-    private static $host = "localhost";
-    private static $username = "cinema_webapp";
-    private static $password = "ultra_secure_app_password";
-    private static $database = "cinema";
-
     /**
      * Get the singleton database connection.
      *
@@ -16,7 +11,14 @@ class DBHelper {
      */
     public static function getConnection() {
         if (self::$connection === null) {
-            self::$connection = new mysqli(self::$host, self::$username, self::$password, self::$database);
+            $username = $_SERVER['CINEMA_DB_USER'];
+            $password = $_SERVER['CINEMA_DB_PASSWORD'];
+            if(!$username || !$password) {
+                throw new Exception("Database credentials not set");
+            }
+            $host = "localhost";
+            $database = "cinema";
+            self::$connection = new mysqli($host, $username, $password, $database);
 
             if (self::$connection->connect_error) {
                 throw new Exception("Database connection error: " . self::$connection->connect_error);
@@ -72,6 +74,21 @@ class DBHelper {
         $query = "CALL $procedureName($placeholders)";
 
         return self::executeQuery($query, $params);
+    }
+
+    /**
+     * Call a database function.
+     *
+     * @param string $functionName Name of the function.
+     * @param array $params Parameters to pass to the function.
+     * @return mixed Result of the function.
+     * @throws Exception
+     */
+    public static function callFunction($functionName, $params = []) {
+        $placeholders = implode(",", array_fill(0, count($params), "?"));
+        $query = "SELECT $functionName($placeholders)";
+
+        return self::executeQuery($query, $params)->fetch_row()[0];
     }
 
     /**

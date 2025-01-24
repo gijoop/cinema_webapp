@@ -1,7 +1,6 @@
 <?php 
 require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Movie.php";
-require_once __DIR__."/../classes/Category.php";
 require_once __DIR__."/../classes/DBHelper.php";
 session_start();
 
@@ -33,6 +32,7 @@ if (isset($_POST['submit_edit_movie'])) {
     $date = $_POST['date'];
     $poster = $_FILES['poster'];
 
+    DBHelper::beginTransaction();
     try {
         $poster_name = $movie->getPosterName();
         if ($poster['name']) {
@@ -43,10 +43,12 @@ if (isset($_POST['submit_edit_movie'])) {
             "UPDATE movie SET title = ?, description = ?, category_id = ?, length = ?, release_date = ?, poster_name = ? WHERE id = ?",
             [$title, $description, $category_id, $length, $date, $poster_name, $movie_id]
         );
+        DBHelper::commitTransaction();
         header("Location: movies.php");
         exit();
     } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
+        DBHelper::rollbackTransaction();
+        echo "<script>alert('Nie udało się edytować filmu'); </script>";
     }
 }
 

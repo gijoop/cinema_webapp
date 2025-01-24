@@ -1,4 +1,0 @@
-- zrobić dokumentację (najlepiej równolegle z projektem)
-- trigger na usuwanie kluczy obcych, inne triggery
-- więzy?
-- zastąpić zapytania na procedury/funkcje w bazie danych

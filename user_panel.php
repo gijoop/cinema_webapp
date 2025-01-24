@@ -39,21 +39,7 @@ function renderUserInfo($user) {
 }
 
 function renderUserTickets($userId) {
-    $tickets = DBHelper::executeQuery(
-        "SELECT showing.date showing_date, 
-        showing.time showing_time, 
-        showing.room_id room_id, 
-        language.name language,
-        movie.title title,
-        ticket.seat_number seat_number
-        FROM ticket 
-        JOIN showing ON showing.id = ticket.showing_id 
-        JOIN movie ON movie.id = showing.movie_id 
-        JOIN language ON language.id = showing.language_id
-        WHERE ticket.user_id = ? 
-        ORDER BY showing.date DESC, showing.time DESC", 
-        [$userId]
-    )->fetch_all(MYSQLI_ASSOC);
+    $tickets = DBHelper::executeProcedure('get_user_tickets_data', [$userId])->fetch_all(MYSQLI_ASSOC);
 
     if (empty($tickets)) {
         return "<p>Brak biletów</p>";
@@ -74,7 +60,7 @@ function renderUserTickets($userId) {
             <td>{$ticket['title']}</td>
             <td>{$ticket['showing_date']}</td>
             <td>{$ticket['showing_time']}</td>
-            <td>{$ticket['room_id']}</td>
+            <td>{$ticket['room_number']}</td>
             <td>{$ticket['seat_number']}</td>
             <td>{$ticket['language']}</td>
         </tr>";

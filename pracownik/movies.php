@@ -1,7 +1,6 @@
 <?php 
 require_once __DIR__."/../classes/User.php";
 require_once __DIR__."/../classes/Movie.php";
-require_once __DIR__."/../classes/Category.php";
 require_once __DIR__."/../classes/DBHelper.php";
 session_start();
 
@@ -30,12 +29,19 @@ if (isset($_POST['submit_movie'])) {
         $poster_name = time() . "_" . basename($poster['name']);
         move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
     }
-    DBHelper::executeQuery(
-        "INSERT INTO movie (title, description, category_id, length, release_date, poster_name) VALUES (?, ?, ?, ?, ?, ?)",
-        [$title, $description, $category_id, $length, $date, $poster_name]
-    );
-    header("Location: movies.php");
-    exit();
+    DBHelper::beginTransaction();
+    try {
+        DBHelper::executeQuery(
+            "INSERT INTO movie (title, description, category_id, length, release_date, poster_name) VALUES (?, ?, ?, ?, ?, ?)",
+            [$title, $description, $category_id, $length, $date, $poster_name]
+        );
+        DBHelper::commitTransaction();
+        header("Location: movies.php");
+        exit();
+    } catch (Exception $e) {
+        DBHelper::rollbackTransaction();
+        echo "<script>alert('Nie udało się dodać filmu'); </script>";
+    }
 }
 
 if (isset($_POST['delete_movie'])) {

@@ -51,8 +51,8 @@ function renderShowing($showing): string {
 
 date_default_timezone_set('Europe/Warsaw');
 $date = isset($_GET['date']) ? formatDate($_GET['date'], DATE_FORMAT) : date(DATE_FORMAT);
-$comingMovies = DBHelper::executeProcedure("get_upcoming_movies")->fetch_all();
-$showings = DBHelper::executeQuery("SELECT id FROM showing WHERE date = ? ORDER BY time ASC", [$date])->fetch_all();
+$comingMovies = DBHelper::executeProcedure("get_upcoming_movies", [3])->fetch_all();
+$showings = DBHelper::executeProcedure("get_showings_for_date", [$date])->fetch_all();
 
 if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];

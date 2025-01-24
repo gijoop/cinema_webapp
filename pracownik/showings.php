@@ -25,19 +25,21 @@ if (isset($_POST['submit_showing'])) {
     $room_id = $_POST['room_id'];
     $language_id = $_POST['language_id'];
 
-    DBHelper::executeQuery(
-        "INSERT INTO showing (movie_id, date, time, room_id, language_id) VALUES (?, ?, ?, ?, ?)",
-        [$movie_id, $date, $time, $room_id, $language_id]
-    );
-    header("Location: showings.php");
-    exit();
-
+    try{
+        DBHelper::executeQuery(
+            "INSERT INTO showing (movie_id, date, time, room_id, language_id) VALUES (?, ?, ?, ?, ?)",
+            [$movie_id, $date, $time, $room_id, $language_id]
+        );
+        header("Location: showings.php");
+        exit();
+    }catch(Exception $e){
+        echo "<script> alert('Nie udało się dodać seansu. Sprawdź czy inne seanse nie kolidują z dodawanym seansem.'); </script>";
+    }
 }
 
 if (isset($_POST['delete_showing'])) {
     $showing_id = $_POST['showing_id'];
 
-    DBHelper::executeQuery("DELETE FROM ticket WHERE showing_id = ?", [$showing_id]);
     DBHelper::executeQuery("DELETE FROM showing WHERE id = ?", [$showing_id]);
     header("Location: showings.php");
     exit();
@@ -96,7 +98,7 @@ function addSelectOptions($table, $name, $value) {
                 <input type="date" name="date" placeholder="Data" class="panel-input" required> 
                 <input type="time" name="time" placeholder="Godzina" class="panel-input" required>
                 <select name="room_id" placeholder="Sala" class="panel-input">
-                    <?php addSelectOptions('room', 'id', 'id'); ?>
+                    <?php addSelectOptions('room', 'number', 'id'); ?>
                 </select>
                 <select name="language_id" placeholder="Język" class="panel-input">
                     <?php addSelectOptions('language', 'name', 'id'); ?>

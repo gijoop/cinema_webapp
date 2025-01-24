@@ -57,7 +57,7 @@ session_start();
                 } elseif (!ctype_alnum($login)) {
                     echo '<h1 class="error">Login powinien się składać tylko z liter a-Z bez polskich znaków i cyfr 0-9</h1>';
                     $validated = false;
-                } elseif (DBHelper::executeQuery("SELECT id FROM user WHERE login = ?", [$login])->num_rows > 0) {
+                } elseif (DBHelper::callFunction("is_login_unique", [$login]) == 0) {
                     echo '<h1 class="error">Podany login już istnieje</h1>';
                     $validated = false;
                 } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -74,16 +74,24 @@ session_start();
                     $validated = false;
                 }
 
-                // Registration
-                if ($validated) {
-                    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                if (!$validated) {
+                    exit();
+                }
+
+                $password_hash = password_hash($password, PASSWORD_DEFAULT);
+                DBHelper::beginTransaction();
+                try{
                     DBHelper::executeQuery(
                         "INSERT INTO user (login, password, firstname, lastname, email, role) VALUES (?, ?, ?, ?, ?, 'CUSTOMER')",
                         [$login, $password_hash, $firstname, $lastname, $email]
                     );
                     $_SESSION['register_success'] = true;
+                    DBHelper::commitTransaction();
                     header("Location: register.php");
                     exit();
+                } catch (Exception $e) {
+                    DBHelper::rollbackTransaction();
+                    echo '<h1 class="error">Wystąpił błąd podczas rejestracji</h1>';
                 }
             } else {
                 echo '<h1 class="error">&nbsp</h1>';

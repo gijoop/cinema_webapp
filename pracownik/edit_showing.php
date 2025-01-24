@@ -32,15 +32,18 @@ if (isset($_POST['submit_edit_showing'])) {
     $room_id = $_POST['room_id'];
     $language_id = $_POST['language_id'];
 
+    DBHelper::beginTransaction();
     try {
         DBHelper::executeQuery(
             "UPDATE showing SET movie_id = ?, date = ?, time = ?, room_id = ?, language_id = ? WHERE id = ?",
             [$movie_id, $date, $time, $room_id, $language_id, $showing_id]
         );
+        DBHelper::commitTransaction();
         header("Location: showings.php");
         exit();
     } catch (Exception $e) {
-        $error_message = "Wystąpił błąd z bazą danych!";
+        DBHelper::rollbackTransaction();
+        echo "<script>alert('Nie udało się edytować seansu. Sprawdź czy inne seanse nie kolidują z edytowanym seansem.'); </script>";
     }
 }
 
@@ -90,7 +93,7 @@ function addSelectOptions($table, $name, $value, $selectedValue) {
                 <input type="date" name="date" placeholder="Data" class="panel-input" value="<?php echo $showing->getDate(); ?>" required> 
                 <input type="time" name="time" placeholder="Godzina" class="panel-input" value="<?php echo $showing->getTime(); ?>" required>
                 <select name="room_id" placeholder="Sala" class="panel-input">
-                    <?php addSelectOptions('room', 'id', 'id', $showing->getRoom()); ?>
+                    <?php addSelectOptions('room', 'number', 'id', $showing->getRoom()); ?>
                 </select>
                 <select name="language_id" placeholder="Język" class="panel-input">
                     <?php addSelectOptions('language', 'name', 'id', $showing->getLanguageID()); ?>
