@@ -147,7 +147,7 @@ CREATE TABLE `showing` (
   CONSTRAINT `showing_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`),
   CONSTRAINT `showing_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`),
   CONSTRAINT `showing_ibfk_3` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +156,7 @@ CREATE TABLE `showing` (
 
 LOCK TABLES `showing` WRITE;
 /*!40000 ALTER TABLE `showing` DISABLE KEYS */;
-INSERT INTO `showing` VALUES (1,3,3,1,'22:00:00','2025-01-22'),(2,7,1,2,'23:00:00','2025-01-22'),(3,6,3,2,'23:30:00','2025-01-23'),(4,5,3,3,'15:00:00','2025-01-25'),(5,9,2,1,'16:00:00','2025-01-30'),(6,8,1,3,'10:00:00','2025-01-30'),(7,3,3,1,'18:00:00','2025-01-25');
+INSERT INTO `showing` VALUES (4,5,3,3,'15:00:00','2025-01-25'),(5,9,2,1,'16:00:00','2025-01-30'),(6,8,1,3,'10:00:00','2025-01-30'),(7,3,3,1,'18:00:00','2025-01-25'),(8,7,4,3,'23:00:00','2025-01-30'),(9,6,2,1,'20:00:00','2025-01-30'),(10,11,3,1,'14:00:00','2025-01-30'),(11,10,3,2,'15:00:00','2025-01-31'),(12,3,2,3,'19:00:00','2025-01-31');
 /*!40000 ALTER TABLE `showing` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -298,7 +298,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (1,1,1,45),(2,1,1,46),(3,3,1,5),(4,4,1,44),(5,4,1,45),(6,4,1,46),(7,4,3,24),(8,4,3,25),(9,4,3,26),(10,4,3,27);
+INSERT INTO `ticket` VALUES (4,4,1,44),(5,4,1,45),(6,4,1,46),(7,4,3,24),(8,4,3,25),(9,4,3,26),(10,4,3,27);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -515,4 +515,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-24 18:38:43
+-- Dump completed on 2025-01-24 20:55:56
