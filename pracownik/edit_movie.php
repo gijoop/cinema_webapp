@@ -36,12 +36,16 @@ if (isset($_POST['submit_edit_movie'])) {
     try {
         $poster_name = $movie->getPosterName();
         if ($poster['name']) {
-            $poster_name = time() . "_" . basename($poster['name']);
-            move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
+            unlink("../posters/" . $poster_name);
+            $new_poster_name = time() . "_" . basename($poster['name']);
+            move_uploaded_file($poster['tmp_name'], "../posters/" . $new_poster_name);
+        }
+        if ($length == '') {
+            $length = null;
         }
         DBHelper::executeQuery(
             "UPDATE movie SET title = ?, description = ?, category_id = ?, length = ?, release_date = ?, poster_name = ? WHERE id = ?",
-            [$title, $description, $category_id, $length, $date, $poster_name, $movie_id]
+            [$title, $description, $category_id, $length, $date, $new_poster_name, $movie_id]
         );
         DBHelper::commitTransaction();
         header("Location: movies.php");
@@ -49,6 +53,7 @@ if (isset($_POST['submit_edit_movie'])) {
     } catch (Exception $e) {
         DBHelper::rollbackTransaction();
         echo "<script>alert('Nie udało się edytować filmu'); </script>";
+        throw $e;
     }
 }
 

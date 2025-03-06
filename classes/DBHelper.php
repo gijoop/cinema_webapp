@@ -11,13 +11,19 @@ class DBHelper {
      */
     public static function getConnection() {
         if (self::$connection === null) {
-            $username = $_SERVER['CINEMA_DB_USER'];
-            $password = $_SERVER['CINEMA_DB_PASSWORD'];
-            if(!$username || !$password) {
-                throw new Exception("Database credentials not set");
+            $env = parse_ini_file(__DIR__ . "/../.env");
+            if ($env === false) {
+                throw new Exception("Environment file not found");
             }
-            $host = "localhost";
-            $database = "cinema";
+
+            $username = $env["DB_USERNAME"];
+            $password = $env["DB_PASSWORD"];
+            $database = $env["DB_DATABASE"];
+            $host = $env["DB_HOST"];
+            
+            if(!$username || !$password || !$database || !$host) {
+                throw new Exception(".env fiile not set");
+            }
             self::$connection = new mysqli($host, $username, $password, $database);
 
             if (self::$connection->connect_error) {

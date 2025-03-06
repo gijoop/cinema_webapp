@@ -1,7 +1,7 @@
 /*!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19  Distrib 10.6.18-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: cinema
+-- Host: localhost    Database: cinema_db
 -- ------------------------------------------------------
 -- Server version	10.6.18-MariaDB-0ubuntu0.22.04.1
 
@@ -85,7 +85,7 @@ CREATE TABLE `movie` (
   KEY `category_id` (`category_id`),
   CONSTRAINT `movie_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   CONSTRAINT `CONSTRAINT_1` CHECK (`length` > 0)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `movie` (
 
 LOCK TABLES `movie` WRITE;
 /*!40000 ALTER TABLE `movie` DISABLE KEYS */;
-INSERT INTO `movie` VALUES (3,'Top Gun: Maverick','Po ponad 30 latach w służbie amerykańskiej marynarki wojennej Pete \"Maverick\" Mitchell (Tom Cruise) jest tam, gdzie powinien być - na szczycie. Jest mistrzowskim pilotem, testującym najnowocześniejsze maszyny. ',131,1,'2022-05-27','1737574376_top_gun.jpg'),(4,'Mission: Impossible - The Final Reckoning','Ten film nie ma jeszcze zarysu fabuły.',NULL,1,'2025-05-23','1737576465_mission_impossible.png'),(5,'SEPTEMBER 5','\"September 5\" ukazuje kulisy kluczowego momentu w historii przekazu medialnego, który na zawsze zmienił sposób nadawania wiadomości na żywo. Akcja filmu rozgrywa się podczas Letnich Igrzysk Olimpijskich w Monachium w 1972 roku i podąża śladem amerykańskiego zespołu transmisyjnego, który błyskawicznie przestawił się z relacjonowania wydarzeń sportowych na rejestrację porwania izraelskich sportowców.',91,1,'2025-02-28','1737576873_sept.png'),(6,'Kapitan Ameryka: Nowy wspaniały świat','W nowym filmie Marvel Studios \"Kapitan Ameryka: Nowy wspaniały świat\" w rolę Kapitana wciela się Anthony Mackie. Sam Wilson alias Falcon, którego Mackie gra w MCU, oficjalnie przyjął tytuł Kapitana Ameryki w finale serialu \"Falcon i Zimowy żołnierz\". Po spotkaniu z nowo wybranym prezydentem USA, Thaddeusem Rossem (marvelowski debiut Harrisona Forda), Sam trafia w sam środek międzynarodowego kryzysu.',118,1,'2025-02-14','1737576986_captain-america-brave-new-world-poster.jpg'),(7,'Mroczny Rycerz','W nowym filmie Batman podejmuje szeroko zakrojoną walkę z przestępczością. Z pomocą porucznika Jima Gordona i prokuratora okręgowego Harveya Denta zabiera się za rozpracowywanie istniejących organizacji przestępczych nękających mieszkańców miasta. Współpraca przynosi efekty, ale bohaterowie wkrótce padną ofiarą chaosu, który rozpęta rosnący w siłę genialny przestępca, znany przerażonym mieszkańcom Gotham jako Joker.',152,1,'2008-08-08','1737577127_asd.jpg'),(8,'Paint Drying','Dokument przedstawia 10 godzin schnięcia farby na ścianie.',607,3,'2016-01-01','1737738270_paint.jpg'),(9,'Gru i Minionki: Pod przykrywką','Gru, Lucy, Margo, Edith i Agnes witają nowego członka rodziny, Gru Juniora, który zamierza dręczyć swojego ojca. Gru stawia czoła nowemu nemezis w postaci Maxime Le Mal i jego dziewczyny Valentiny, a rodzina jest zmuszona do ucieczki.',95,2,'2024-07-05','1737738342_minion.png'),(10,'To nie jest kraj dla starych ludzi','Gdy Llewelyn Moss znajduje walizkę zawierającą gotówkę, nie spodziewa się, że ściągnie na siebie niebezpieczeństwo w postaci psychopatycznego zabójcy, Antona Chigurha.',122,3,'2008-02-05','1737738404_kraj.png'),(11,'Psi Patrol: Wielki film','W sequelu filmu w Adventure City wyląduje magiczny meteor, który da szczeniakom z Psiego patrolu super moce. Dla Skye, najmniejszej członkini zespołu, jej nowe moce są spełnieniem marzeń. Ale sprawy przybiorą gorszy obrót, gdy arcy-rywal piesków, Humdinger, ucieknie z więzienia i połączy siły z szalonym naukowcem, aby ukraść super moce dwóm złoczyńcom',92,8,'2023-10-13','1737738524_psi.jpg');
+INSERT INTO `movie` VALUES (3,'Top Gun: Maverick','Po ponad 30 latach w służbie amerykańskiej marynarki wojennej Pete \"Maverick\" Mitchell (Tom Cruise) jest tam, gdzie powinien być - na szczycie. Jest mistrzowskim pilotem, testującym najnowocześniejsze maszyny. ',131,1,'2022-05-27','1737574376_top_gun.jpg'),(4,'Mission: Impossible - The Final Reckoning','Ten film nie ma jeszcze zarysu fabuły.',NULL,1,'2025-05-23','1737576465_mission_impossible.png'),(5,'SEPTEMBER 5','\"September 5\" ukazuje kulisy kluczowego momentu w historii przekazu medialnego, który na zawsze zmienił sposób nadawania wiadomości na żywo. Akcja filmu rozgrywa się podczas Letnich Igrzysk Olimpijskich w Monachium w 1972 roku i podąża śladem amerykańskiego zespołu transmisyjnego, który błyskawicznie przestawił się z relacjonowania wydarzeń sportowych na rejestrację porwania izraelskich sportowców.',91,1,'2025-02-28','1737576873_sept.png'),(6,'Kapitan Ameryka: Nowy wspaniały świat','W nowym filmie Marvel Studios \"Kapitan Ameryka: Nowy wspaniały świat\" w rolę Kapitana wciela się Anthony Mackie. Sam Wilson alias Falcon, którego Mackie gra w MCU, oficjalnie przyjął tytuł Kapitana Ameryki w finale serialu \"Falcon i Zimowy żołnierz\". Po spotkaniu z nowo wybranym prezydentem USA, Thaddeusem Rossem (marvelowski debiut Harrisona Forda), Sam trafia w sam środek międzynarodowego kryzysu.',118,1,'2025-02-14','1737576986_captain-america-brave-new-world-poster.jpg'),(7,'Mroczny Rycerz','W nowym filmie Batman podejmuje szeroko zakrojoną walkę z przestępczością. Z pomocą porucznika Jima Gordona i prokuratora okręgowego Harveya Denta zabiera się za rozpracowywanie istniejących organizacji przestępczych nękających mieszkańców miasta. Współpraca przynosi efekty, ale bohaterowie wkrótce padną ofiarą chaosu, który rozpęta rosnący w siłę genialny przestępca, znany przerażonym mieszkańcom Gotham jako Joker.',152,1,'2008-08-08','1737577127_asd.jpg'),(8,'Paint Drying','Dokument przedstawia 10 godzin schnięcia farby na ścianie.',607,3,'2016-01-01','1737738270_paint.jpg'),(9,'Gru i Minionki: Pod przykrywką','Gru, Lucy, Margo, Edith i Agnes witają nowego członka rodziny, Gru Juniora, który zamierza dręczyć swojego ojca. Gru stawia czoła nowemu nemezis w postaci Maxime Le Mal i jego dziewczyny Valentiny, a rodzina jest zmuszona do ucieczki.',95,2,'2024-07-05','1737738342_minion.png'),(10,'To nie jest kraj dla starych ludzi','Gdy Llewelyn Moss znajduje walizkę zawierającą gotówkę, nie spodziewa się, że ściągnie na siebie niebezpieczeństwo w postaci psychopatycznego zabójcy, Antona Chigurha.',122,3,'2008-02-05','1737738404_kraj.png'),(11,'Psi Patrol: Wielki film','W sequelu filmu w Adventure City wyląduje magiczny meteor, który da szczeniakom z Psiego patrolu super moce. Dla Skye, najmniejszej członkini zespołu, jej nowe moce są spełnieniem marzeń. Ale sprawy przybiorą gorszy obrót, gdy arcy-rywal piesków, Humdinger, ucieknie z więzienia i połączy siły z szalonym naukowcem, aby ukraść super moce dwóm złoczyńcom',92,8,'2023-10-13','1737738524_psi.jpg'),(12,'Avatar: Ogień i popiół','Ten film nie ma jeszcze zarysu fabuły. ',NULL,1,'2025-12-19','1741296554_avatar_3.jpg'),(13,'Shrek 5','Ten film nie ma jeszcze zarysu fabuły. ',NULL,1,'2026-01-01','1741296575_shrek5.jpg');
 /*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -357,7 +357,7 @@ DELIMITER ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
--- Dumping routines for database 'cinema'
+-- Dumping routines for database 'cinema_db'
 --
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'IGNORE_SPACE,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
@@ -536,4 +536,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-06 20:59:15
+-- Dump completed on 2025-03-06 22:31:07

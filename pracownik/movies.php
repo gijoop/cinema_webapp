@@ -27,20 +27,25 @@ if (isset($_POST['submit_movie'])) {
     $poster_name = null;
     if ($poster['name']) {
         $poster_name = time() . "_" . basename($poster['name']);
-        move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
     }
     DBHelper::beginTransaction();
     try {
+        if ($length == '') {
+            $length = null;
+        }
         DBHelper::executeQuery(
             "INSERT INTO movie (title, description, category_id, length, release_date, poster_name) VALUES (?, ?, ?, ?, ?, ?)",
             [$title, $description, $category_id, $length, $date, $poster_name]
         );
         DBHelper::commitTransaction();
+        if ($poster_name) {
+            move_uploaded_file($poster['tmp_name'], "../posters/" . $poster_name);
+        }
         header("Location: movies.php");
         exit();
     } catch (Exception $e) {
         DBHelper::rollbackTransaction();
-        echo "<script>alert('Nie udało się dodać filmu'); </script>";
+        echo "<script>alert('Nie udało się dodać filmu');</script>";
     }
 }
 
