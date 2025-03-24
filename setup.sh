@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
+
 echo "======================================"
 echo " MariaDB Database & User Creation Script"
 echo "======================================"
@@ -7,11 +9,11 @@ echo "This script will:"
 echo "  1. Prompt for MariaDB admin credentials."
 echo "  2. Create a new database and user with the provided details."
 echo "  3. Generate a .env file with the new credentials."
-echo "  4. Optionally import an SQL file (db/cinema_db.sql) if it exists."
+echo "  4. Import an SQL file (cinema_db.sql)."
 echo ""
 echo "Prerequisites:"
 echo "  - MariaDB installed and running."
-echo "  - Admin credentials with privileges to create databases and users."
+echo "  - MariaDB user with admin privileges."
 echo ""
 echo "Usage:"
 echo "  Run the script and follow the on-screen prompts."
@@ -39,7 +41,7 @@ FLUSH PRIVILEGES;"
 if [ $? -eq 0 ]; then
   echo "Database '${new_db}' and user '${new_user}' created successfully."
 else
-  echo "Error creating database/user. Please check your credentials and privileges."
+  echo "Error creating database/user. Please check your credentials and privileges. It is possible that user with given username already exists."
   exit 1
 fi
 
@@ -49,7 +51,7 @@ fi
     echo "DB_HOST=localhost"
     echo "DB_USERNAME=${new_user}"
     echo "DB_PASSWORD=${new_password}"
-} > ".env"
+} > .env
 
 if [ $? -eq 0 ]; then
     echo ".env file created successfully."
@@ -62,11 +64,20 @@ fi
 if [ -f "db/cinema_db.sql" ]; then
   mysql -u "$admin_user" -p"$admin_password" "$new_db" < db/cinema_db.sql
   if [ $? -eq 0 ]; then
-    echo "Database imported successfully from database.sql."
+    echo "Database imported successfully from cinema_db.sql."
   else
-    echo "Error importing database from database.sql."
+    echo "Error importing database from cinema_db.sql."
     exit 1
   fi
 else
-  echo "database.sql file not found. Skipping import."
+  echo "Error: cinema_db.sql file not found."
+  exit 1
 fi
+
+echo "Database setup complete."
+echo "======================================"
+echo ""
+echo "You can now host the application with webserver of your choice."
+echo "To log in to example employee account, use the following credentials:"
+echo "Login: exampleadmin"
+echo "Password: examplepassword"

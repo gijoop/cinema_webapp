@@ -1,5 +1,4 @@
 <?php
-// index.php
 // DB backup command: mysqldump -u root -p --routines cinema > cinema.sql
 
 declare(strict_types=1);

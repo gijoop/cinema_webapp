@@ -322,7 +322,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `email` (`email`),
   CONSTRAINT `CONSTRAINT_1` CHECK (`role` in ('EMPLOYEE','CUSTOMER'))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +331,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'luidku','$2y$10$M3eIAxQMZbjhTmafcaYFhuEvfqQ28Z4q2m0XMzom.fpPjaeH9JXY.','Łukasz','Kuś','luidku@gmail.com','2025-01-22','EMPLOYEE'),(2,'luidku2','$2y$10$3UJArgcSD6aj3eS66zlsR.PBb1lf6Cn3y5QtnhF/dEnpCZpS5GfDG','Test','Test','test@testest.test','2025-01-23','CUSTOMER'),(3,'admin','$2y$10$28RxzxSPtQwVFpWuY5/dEuBSC2cLbeiaFOGpMPb4VZVuS.ufEA9qS','Mieczysław','Swędziński','admin@admin.admin','2025-01-24','EMPLOYEE');
+INSERT INTO `user` VALUES (1,'exampleadmin','$2y$10$Swyj0132kCflmCh49mCaGOMrV6YLI0WYBD7YI3hyQtvwkvvvNjP4u','Example','Admin','example@admin.to','2025-03-24','EMPLOYEE');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -536,4 +536,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-06 22:31:07
+-- Dump completed on 2025-03-24 16:47:00
